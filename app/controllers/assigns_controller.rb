@@ -31,11 +31,15 @@ class AssignsController < ApplicationController
       I18n.t('views.messages.cannot_delete_the_leader')
     elsif Assign.where(user_id: assigned_user.id).count == 1
       I18n.t('views.messages.cannot_delete_only_a_member')
-    elsif assign.destroy
-      set_next_team(assign, assigned_user)
-      I18n.t('views.messages.delete_member')
-    else
+    elsif current_user == assigned_user || current_user == assign.team.owner
+      if assign.destroy
+        set_next_team(assign, assigned_user)
+        I18n.t('views.messages.delete_member')
+      else
       I18n.t('views.messages.cannot_delete_member_4_some_reason')
+      end
+    else
+      flash[:alert] = "他のユーザーは削除できません。"
     end
   end
 
