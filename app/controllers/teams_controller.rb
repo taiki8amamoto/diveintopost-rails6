@@ -16,10 +16,7 @@ class TeamsController < ApplicationController
   end
 
   def edit
-    unless @team.owner == current_user
-      render :show
-    end
-    
+    render :show unless @team.owner == current_user
   end
 
   def create
